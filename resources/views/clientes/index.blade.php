@@ -1,6 +1,12 @@
 @include('layout.header')
 
 <div class="container">
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
     <a href="{{ route('clientes.create') }}" class="btn btn-primary m-4">NOVO CLIENTE</a>
     
     <table class="table">
@@ -23,7 +29,16 @@
     <tbody>
         @foreach($clientes as $cliente)
         <tr>
-            <td><a href="{{ route('clientes.show',$cliente->id)}}"><i class="far fa-edit" style="color: lightblue"></i></a></td>
+            <td>
+                <div class="d-flex flex-row align-items-center justify-content-center">
+                    <form action="{{ route('clientes.destroy',$cliente->id)}}" method="post">
+                        <a href="{{ route('clientes.show',$cliente->id)}}"><i class="far fa-edit" style="color: lightblue"></i></a>
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-light"><i class="fas fa-trash" style="color: lightblue"></i></button>
+                    </form>
+                </div>
+            </td>
             <th scope="row">{{$cliente->id}}</th>
             <td>{{$cliente->nome}}</td>
             <td>{{$cliente->email}}</td>
